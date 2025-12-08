@@ -43,7 +43,14 @@ async function doConvert (inputFile, inputFormat, outputFormat) {
     image.src = url;
   });
 
-  const base64 = btoa(String.fromCharCode.apply(null, inputFile.bytes));
+  let binary = "";
+  const bytes = inputFile.bytes;
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, chunk);
+  }
+  const base64 = btoa(binary);
 
   const output = `
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080"><g>
