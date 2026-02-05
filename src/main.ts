@@ -33,7 +33,14 @@ const ui = {
 const filterButtonList = (list: HTMLDivElement, string: string) => {
   for (const button of Array.from(list.children)) {
     if (!(button instanceof HTMLButtonElement)) continue;
-    if (!button.textContent.toLowerCase().includes(string)) {
+    const formatIndex = button.getAttribute("format-index");
+    let hasExtension = false;
+    if (formatIndex) {
+      const format = allOptions[parseInt(formatIndex)];
+      hasExtension = format?.format.extension.toLowerCase().includes(string);
+    }
+    const hasText = button.textContent.toLowerCase().includes(string);
+    if (!hasExtension && !hasText) {
       button.style.display = "none";
     } else {
       button.style.display = "";
