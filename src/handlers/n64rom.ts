@@ -1,5 +1,6 @@
 import type { FileData, FileFormat, FormatHandler } from "../FormatHandler.ts";
 import normalizeMimeType from "../normalizeMimeType.ts";
+import CommonFormats from "src/CommonFormats.ts";
 
 const ROM_MAGIC = {
   z64: [0x80, 0x37, 0x12, 0x40],
@@ -9,7 +10,6 @@ const ROM_MAGIC = {
 
 const MAX_CANVAS_DIMENSION = 16384;
 const N64_ROM_MIME = normalizeMimeType("application/x-n64-rom");
-const PNG_MIME = normalizeMimeType("image/png");
 
 type N64Order = "z64" | "n64" | "v64";
 
@@ -50,17 +50,10 @@ class n64romHandler implements FormatHandler {
       category: "data",
       lossless: true
     },
-    {
-      name: "N64 ROM Packed Image (PNG)",
-      format: "png",
-      extension: "png",
-      mime: PNG_MIME,
-      from: true,
-      to: true,
-      internal: "n64png",
-      category: ["image", "data"],
-      lossless: true
-    }
+    CommonFormats.PNG.builder("n64png")
+      .allowFrom()
+      .allowTo()
+      .markLossless()
   ];
   public ready: boolean = false;
 
